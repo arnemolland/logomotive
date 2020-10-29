@@ -1,0 +1,15 @@
+{
+	"name": "logomotive",
+	"env": {
+		"MONGO_URI": {
+			"description": "The MongoDB hostname",
+			"value": "mongodb://localhost:27017",
+			"required": true
+		}
+	},
+	"options": {
+		"allow-unauthenticated": true,
+		"memory": "512Mi",
+		"cpu": "1"
+	}
+}
