@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package logomotive;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/arnemolland/logomotive";
+
+service Logomotive {
+	rpc Push(LogEntry) returns(LogEntry);
+	rpc Feed(stream LogEntry) returns (stream LogEntry);
+	rpc Tail(TailQuery) returns(stream LogEntry);
+	rpc Labels(google.protobuf.Empty) returns (LabelList); 
+}
+
+message LogEntry {
+	string id = 1;
+	string message = 2;
+	string label = 3;
+	google.protobuf.Timestamp time = 4;
+}
+
+message LabelList {
+	repeated string labels = 1;
+}
+
+message TailQuery {
+	string label = 1;
+}
