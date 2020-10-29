@@ -1,0 +1,16 @@
+# Ignore everything
+**
+
+# Allow files and directories
+!*.go
+!server/**
+!go.mod
+!go.sum
+!Makefile
+!pkg
+
+# Ignore unnecessary files inside allowed directories
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db
