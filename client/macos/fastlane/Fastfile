@@ -4,6 +4,10 @@ def packages_get
   sh("cd .. && flutter packages get")
 end
 
+def flutter_build
+  sh("cd .. && flutter build macos")
+end
+
 platform :mac do
   desc "Builds and notarizes a Developer ID app"
   lane :build do
@@ -12,6 +16,7 @@ platform :mac do
     end
     packages_get
     sync_code_signing(type: "developer_id")
+    flutter_build
     gym
     notarize(package: "./build/Logomotive.app")
   end

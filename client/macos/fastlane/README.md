@@ -20,7 +20,7 @@ or alternatively using `brew install fastlane`
 ```
 fastlane mac build
 ```
-Description of what the lane does
+Builds and notarizes a Developer ID app
 
 ----
 

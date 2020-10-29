@@ -20,7 +20,7 @@ or alternatively using `brew install fastlane`
 ```
 fastlane ios build
 ```
-Description of what the lane does
+Builds, signs and deploys iOS app to Firebase App Distribution
 
 ----
 

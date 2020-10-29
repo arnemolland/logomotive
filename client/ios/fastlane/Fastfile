@@ -6,6 +6,10 @@ def packages_get
   sh("cd .. && flutter packages get")
 end
 
+def flutter_build
+  sh("cd .. && flutter build ios --no-codesign")
+end
+
 platform :ios do
   desc "Builds, signs and deploys iOS app to Firebase App Distribution"
   lane :build do
@@ -14,6 +18,7 @@ platform :ios do
     end
     packages_get
     sync_code_signing(type: "adhoc")
+    flutter_build
     gym
     firebase_app_distribution(
       app: $firebase_app_id,

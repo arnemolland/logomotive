@@ -1,0 +1,137 @@
+name: Archive client binaries
+
+on:
+  push:
+    branches:
+        - master
+
+env:
+  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.fastlane_apple_application_specific_password }}
+  FASTLANE_PASSWORD: ${{ secrets.fastlane_password }}
+  FASTLANE_SESSION: ${{ secrets.fastlane_session }}
+  FIREBASE_TOKEN: ${{ secrets.firebase_token }}
+  MATCH_DEPLOY_KEY: ${{ secrets.match_deploy_key }}
+  MATCH_PASSWORD: ${{ secrets.match_password }}
+  GIT_SSH_COMMAND: "ssh -vvv -o StrictHostKeyChecking=no"
+
+jobs:
+  archive_android:
+    name: Archive Android app, deploy to Firebase App Distribution
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: client
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '8.x'
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+    - run: |
+        yarn global add firebase-tools --network-timeout 1000000
+        echo "::add-path::$(yarn global bin)"
+    - run: cd android && bundle install
+    - run: cd android && bundle exec fastlane build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: logomotive-android
+        path: client/build/app/outputs/flutter-apk/app-release.apk
+
+  archive_ios:
+    name: Archive iOS app, deploy to Firebase App Distribution
+    runs-on: macos-latest
+    defaults:
+        run:
+          working-directory: client/ios
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+    - run: |
+        yarn global add firebase-tools --network-timeout 1000000
+        echo "::add-path::$(yarn global bin)"
+    - run: gem install fastlane-plugin-firebase_app_distribution fastlane
+    - uses: webfactory/ssh-agent@v0.4.1
+      with:
+          ssh-private-key: ${{ secrets.match_deploy_key }}
+    - run: bundle install
+    - run: fastlane build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: logomotive-ios
+        path: client/ios/build/Logomotive.ipa
+  
+  archive_macos:
+    name: Archive macOS app
+    runs-on: macos-latest
+    defaults:
+        run:
+          working-directory: client/macos
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: dev
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+    - run: gem install fastlane-plugin-firebase_app_distribution fastlane
+    - uses: webfactory/ssh-agent@v0.4.1
+      with:
+          ssh-private-key: ${{ secrets.match_deploy_key }}
+    - run: bundle install
+    - run: flutter config --enable-macos-desktop
+    - run: fastlane build
+    - run: rm -rf build/*.app.dSYM*
+    - uses: actions/upload-artifact@v2
+      with:
+        name: logomotive-macos
+        path: client/macos/build
+
+  archive_windows:
+    name: Archive Windows app
+    runs-on: windows-latest
+    defaults:
+        run:
+          working-directory: client
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: dev
+    - run: flutter pub get
+    - run: flutter config --enable-windows-desktop
+    - run: flutter build windows
+    - uses: actions/upload-artifact@v2
+      with:
+        name: logomotive-windows
+        path: client\build\windows\runner\release
+
+  archive_linux:
+    name: Archive Linux app
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: client
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: dev
+    - name: Install build tools
+      run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev
+    - run: flutter pub get
+    - run: flutter config --enable-linux-desktop
+    - run: flutter build linux
+    - uses: actions/upload-artifact@v2
+      with:
+        name: logomotive-linux
+        path: |
+          client/build/linux/release/bundle
+    
+    
