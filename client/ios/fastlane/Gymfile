@@ -1,0 +1,5 @@
+scheme("Runner")
+clean(true)
+output_directory("./build")
+output_name("Logomotive")
+export_method("ad-hoc")

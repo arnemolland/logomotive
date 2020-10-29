@@ -1,0 +1,5 @@
+app_identifier "sh.molland.logomotive"
+apple_id "arneolaim@gmail.com"
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

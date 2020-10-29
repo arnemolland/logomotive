@@ -1,0 +1,18 @@
+default_platform(:mac)
+
+def packages_get
+  sh("cd .. && flutter packages get")
+end
+
+platform :mac do
+  desc "Builds and notarizes a Developer ID app"
+  lane :build do
+    if is_ci
+      setup_ci
+    end
+    packages_get
+    sync_code_signing(type: "developer_id")
+    gym
+    notarize(package: "./build/Logomotive.app")
+  end
+end

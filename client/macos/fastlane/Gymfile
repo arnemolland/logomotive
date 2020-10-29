@@ -1,0 +1,6 @@
+scheme("Runner")
+clean(true)
+output_directory("./build")
+output_name("Logomotive")
+export_method("developer-id")
+skip_package_pkg(true)

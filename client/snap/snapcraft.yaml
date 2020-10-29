@@ -1,0 +1,21 @@
+name: logomotive
+version: 1.0.0
+summary: Logomotive
+description: A log exploration app
+
+confinement: strict
+base: core18
+grade: stable
+
+apps:
+  logomotive:
+    command: logomotive
+    extensions: [flutter-dev]
+    plugs:
+    - network
+
+parts:
+  logomotive:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart

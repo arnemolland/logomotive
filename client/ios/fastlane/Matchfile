@@ -1,0 +1,7 @@
+git_url("https://github.com/arnemolland/certificates")
+
+storage_mode("git")
+
+type("development")
+app_identifier("sh.molland.logomotive")
+username("arneolaim@gmail.com")

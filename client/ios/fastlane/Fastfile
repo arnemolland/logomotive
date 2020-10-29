@@ -1,0 +1,24 @@
+default_platform(:ios)
+
+$firebase_app_id = "1:839108747871:ios:68a1c55ebd31aaca7ab1ea"
+
+def packages_get
+  sh("cd .. && flutter packages get")
+end
+
+platform :ios do
+  desc "Builds, signs and deploys iOS app to Firebase App Distribution"
+  lane :build do
+    if is_ci
+      setup_ci
+    end
+    packages_get
+    sync_code_signing(type: "adhoc")
+    gym
+    firebase_app_distribution(
+      app: $firebase_app_id,
+      firebase_cli_token: $firebase_token,
+      groups: "GitHub",
+    )
+  end
+end

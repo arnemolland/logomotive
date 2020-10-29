@@ -1,0 +1,28 @@
+update_fastlane
+
+default_platform(:android)
+
+$firebase_app_id = "1:839108747871:android:bfdf14739ccba5607ab1ea"
+$firebase_token = ENV["FIREBASE_TOKEN"]
+
+def packages_get
+  sh("cd .. && flutter packages get")
+end
+
+def build_apk
+  sh("cd .. && flutter build apk")
+end
+
+platform :android do
+  desc "Builds and deploys app to Firebase App Distribution"
+  lane :build do
+    packages_get
+    build_apk
+    firebase_app_distribution(
+      app: $firebase_app_id,
+      firebase_cli_token: $firebase_token,
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+      groups: "GitHub",
+    )
+  end
+end

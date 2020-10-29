@@ -1,0 +1,31 @@
+name: logomotive
+description: An example client application for Logomotive
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.0
+  custom_refresh_indicator: ^0.9.0
+  flutter_launcher_icons: ^0.8.1
+  grpc: ^2.3.0
+  protobuf: ^1.0.1
+  uuid: ^2.2.2
+  crayola: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logomotive.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logomotive_foreground.png"
