@@ -1,0 +1,6 @@
+commonLabels:
+  app: logomotive
+
+resources:
+- app.yaml
+- mongo.yaml

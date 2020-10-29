@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: logomotive-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    ingress.kubernetes.io/custom-request-headers: "l5d-dst-override: logomotive-svc.default.svc.cluster.local:443"
+    ingress.gcp.kubernetes.io/pre-shared-cert: "logomotive-cert"
+    kubernetes.io/ingress.global-static-ip-name: "logomotive-ip"
+    service.alpha.kubernetes.io/app-protocols: '{"logomotive-grpc":"HTTP2"}'
+spec:
+  backend:
+    serviceName: logomotive-svc
+    servicePort: logomotive-grpc
+          

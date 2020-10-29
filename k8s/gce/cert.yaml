@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: logomotive-cert
+spec:
+  domains:
+    - kube.molland.sh

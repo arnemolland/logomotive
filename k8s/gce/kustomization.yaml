@@ -1,0 +1,8 @@
+commonLabels:
+  app: logomotive
+
+resources:
+- app.yaml
+- mongo.yaml
+- ingress.yaml
+- cert.yaml
