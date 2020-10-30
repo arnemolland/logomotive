@@ -23,7 +23,7 @@ platform :ios do
     firebase_app_distribution(
       app: $firebase_app_id,
       firebase_cli_token: $firebase_token,
-      groups: "GitHub",
+      groups: "github",
     )
   end
 end

@@ -22,7 +22,7 @@ platform :android do
       app: $firebase_app_id,
       firebase_cli_token: $firebase_token,
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
-      groups: "GitHub",
+      groups: "github",
     )
   end
 end
