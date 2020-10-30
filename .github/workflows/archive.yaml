@@ -12,7 +12,7 @@ env:
   FIREBASE_TOKEN: ${{ secrets.firebase_token }}
   MATCH_DEPLOY_KEY: ${{ secrets.match_deploy_key }}
   MATCH_PASSWORD: ${{ secrets.match_password }}
-  GIT_SSH_COMMAND: "ssh -vvv -o StrictHostKeyChecking=no"
+  GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
 
 jobs:
   archive_android:
