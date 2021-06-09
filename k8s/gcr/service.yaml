@@ -1,0 +1,23 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: $IMAGE
+spec:    
+  template:
+    spec:
+      containers:
+        image: gcr.io/$PROJECT_ID/$IMAGE:$RELEASE_VERSION
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        env:
+        - name: PROJECT_ID
+          value: $PROJECT_ID
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: $GCP_SA
+        - name: MONGO_URI
+          value: $MONGO_URI

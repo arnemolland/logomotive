@@ -2,8 +2,7 @@ name: Archive client binaries
 
 on:
   push:
-    branches:
-        - master
+    branches: [main]
 
 env:
   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.fastlane_apple_application_specific_password }}

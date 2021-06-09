@@ -61,8 +61,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String label;
-  Future tail;
+  late String label;
+  Future<List<LogEntry>>? tail;
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<LogEntry>> getFuture(String label) {
-    return LogomotiveService.of(context).tail(TailQuery()..label = label);
+    return LogomotiveService.of(context)!.tail(TailRequest()..label = label);
   }
 
   @override

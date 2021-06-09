@@ -23,3 +23,5 @@
 
 # Fastlane
 report.xml
+
+.vscode

@@ -4,15 +4,15 @@ import 'package:logomotive/generated/api/v1/logomotive.pb.dart';
 import 'package:logomotive/railroad.dart';
 
 class LogList extends StatelessWidget {
-  final List<LogEntry> entries;
-  final Future<void> Function() onRefresh;
+  final List<LogEntry>? entries;
+  final Future<void> Function()? onRefresh;
 
-  const LogList({Key key, this.entries, this.onRefresh}) : super(key: key);
+  const LogList({Key? key, this.entries, this.onRefresh}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
-      onRefresh: onRefresh,
+      onRefresh: onRefresh!,
       builder: (context, child, controller) {
         return AnimatedBuilder(
           animation: controller,
@@ -62,9 +62,9 @@ class LogList extends StatelessWidget {
         );
       },
       child: ListView.builder(
-        itemCount: entries.length,
+        itemCount: entries!.length,
         itemBuilder: (context, index) {
-          final entry = entries[index];
+          final entry = entries![index];
           return ListTile(
             title: Text(entry.message),
             subtitle: Text(entry.id),

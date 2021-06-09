@@ -1,0 +1,45 @@
+name: Cloud Run CD
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PROJECT_ID: ${{ secrets.gcp_project }}
+  GCP_SA: ${{ secrets.gcp_sa }}
+  REGION: europe-north1
+  IMAGE: ${{ github.event.repository.name }}
+  MONGO_URI: ${{ secrets.mongo_uri }}
+
+jobs:
+  setup-publish-deploy:
+    name: Setup, build image, publish and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.gcp_sa }}
+          project_id: ${{ secrets.gcp_project }}
+      - name: Install Google Cloud SDK Beta components
+        run: yes | gcloud components install beta --quiet
+      - name: Set service version
+        run: echo "RELEASE_VERSION=${GITHUB_SHA}" >> $GITHUB_ENV
+      - name: Configure Google Container Registry credentials
+        run: gcloud --quiet auth configure-docker
+      - name: Build image
+        run: |-
+          docker build \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE:$RELEASE_VERSION" \
+            .
+      - name: Publish image
+        run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$RELEASE_VERSION"
+      - name: Expand service manifest with env vars
+        run: envsubst < k8s/gcr/service.yaml > k8s/gcr/service.yaml
+      - name: Deploy image to Cloud Run
+        run: |-
+            gcloud beta run services replace k8s/gcr/service.yaml \
+            --quiet \
+            --region $REGION \
+            --platform "managed"

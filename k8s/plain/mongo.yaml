@@ -29,6 +29,10 @@ spec:
       containers:
       - image: mongo
         name: mongodb
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2Gi
         ports:
         - containerPort: 27017
           name: mongodb

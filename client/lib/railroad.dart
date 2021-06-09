@@ -4,12 +4,12 @@ class Railroad extends StatelessWidget {
   final Duration duration;
   final double start;
   final double end;
-  final Widget child;
+  final Widget? child;
   final Curve curve;
   final bool animate;
 
   const Railroad({
-    Key key,
+    Key? key,
     this.duration = const Duration(milliseconds: 2500),
     this.start = 100,
     this.end = -100,
@@ -32,7 +32,7 @@ class Railroad extends StatelessWidget {
         offset: Offset(animation, 0),
         child: Stack(
           children: [
-            child,
+            child!,
             AnimatedOpacity(
               duration: Duration(milliseconds: 250),
               opacity: (animation < start / 2 && animation > end / 2) ? 1 : 0,

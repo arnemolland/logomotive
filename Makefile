@@ -20,7 +20,7 @@ install:
 	go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 
 generate:
-	protoc --go_out=plugins=grpc:pkg --go_opt=paths=source_relative api/v1/logomotive.proto
+	protoc --go-grpc_out=pkg --go-grpc_opt=paths=source_relative api/v1/logomotive.proto
 	protoc -I ${protobuf} -I. --dart_out=grpc:client/lib/generated api/v1/logomotive.proto ${protobuf}/${timestamp} ${protobuf}/${empty}
 
 deploy:
@@ -33,7 +33,7 @@ deploy_gcr:
 	gcloud beta run deploy logomotive \
 		--image=gcr.io/molland/logomotive \
 		--vpc-connector=logomotive-connector \
-		--vpc-egress=all
+		--vpc-egress=all \
 		--set-env-vars=[MONGO_URI=${MONGO_URI}]
 
 egress:

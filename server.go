@@ -49,7 +49,7 @@ func (s *Server) Start() {
 		log.Fatalf("failed to connect to db: %v", err)
 	}
 	log.Print("connected to database")
-	logomotive.RegisterLogomotiveServer(s.grpcSrv, NewLogomotive(client.Database("logs")))
+	logomotive.RegisterLogomotiveServiceServer(s.grpcSrv, NewLogomotive(client.Database("logs")))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", s.port))
 	if err != nil {

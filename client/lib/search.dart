@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logomotive/service.dart';
 
-class LabelSearchDelegate extends SearchDelegate<String> {
+class LabelSearchDelegate extends SearchDelegate<String?> {
   @override
   ThemeData appBarTheme(BuildContext context) => Theme.of(context);
 
@@ -32,10 +32,10 @@ class LabelSearchDelegate extends SearchDelegate<String> {
 
   Widget buildLabelList(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future: LogomotiveService.of(context).labels(),
+      future: LogomotiveService.of(context)!.labels(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final results = snapshot.data
+          final results = snapshot.data!
               .where((label) => label.contains(super.query))
               .toList();
           return ListView.builder(

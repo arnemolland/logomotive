@@ -6,9 +6,9 @@ import 'package:logomotive/service.dart';
 import 'package:uuid/uuid.dart';
 
 class AddLogScreen extends StatefulWidget {
-  final Function(LogEntry) onEntryAdded;
+  final Function(LogEntry)? onEntryAdded;
 
-  const AddLogScreen({Key key, this.onEntryAdded}) : super(key: key);
+  const AddLogScreen({Key? key, this.onEntryAdded}) : super(key: key);
 
   @override
   _AddLogScreenState createState() => _AddLogScreenState();
@@ -25,7 +25,7 @@ class _AddLogScreenState extends State<AddLogScreen> {
 
   final formKey = GlobalKey<FormState>();
 
-  String validator(String value) {
+  String? validator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Can\'t be empty';
     } else {
@@ -103,14 +103,16 @@ class _AddLogScreenState extends State<AddLogScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.send_rounded),
         onPressed: () {
-          if (formKey.currentState.validate()) {
+          if (formKey.currentState!.validate()) {
             final entry = LogEntry()
               ..id = idController.text
               ..message = messageController.text
               ..label = labelController.text
               ..time = Timestamp.fromDateTime(DateTime.now());
 
-            LogomotiveService.of(context).push(entry).then((_) {
+            LogomotiveService.of(context)!
+                .push(PushRequest(entry: entry))
+                .then((_) {
               widget.onEntryAdded?.call(entry);
               Navigator.pop(context);
             });

@@ -7,7 +7,6 @@ import (
 	"log"
 
 	logomotive "github.com/arnemolland/logomotive/pkg/api/v1"
-	"github.com/golang/protobuf/ptypes/empty"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	codes "google.golang.org/grpc/codes"
@@ -23,6 +22,7 @@ func NewLogomotive(db *mongo.Database) *Logomotive {
 
 // Logomotive is a smiple struct containing a MongDB database reference
 type Logomotive struct {
+	logomotive.UnimplementedLogomotiveServiceServer
 	db *mongo.Database
 }
 
@@ -36,22 +36,22 @@ func getLabel(entry *logomotive.LogEntry) string {
 }
 
 // Push inserts a log entry to a MongoDB collection
-func (l *Logomotive) Push(ctx context.Context, entry *logomotive.LogEntry) (*logomotive.LogEntry, error) {
+func (l *Logomotive) Push(ctx context.Context, req *logomotive.PushRequest) (*logomotive.PushResponse, error) {
 
-	collection := l.db.Collection(getLabel(entry))
+	collection := l.db.Collection(getLabel(req.Entry))
 
-	result, err := collection.InsertOne(context.Background(), entry)
+	result, err := collection.InsertOne(context.Background(), req.Entry)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))
 	}
 
 	log.Printf("Inserted entry with ID: %v", result.InsertedID)
 
-	return entry, nil
+	return &logomotive.PushResponse{Entry: req.Entry}, nil
 }
 
 // Feed receives a stream of logs and stores each entry before streaming them back
-func (l *Logomotive) Feed(stream logomotive.Logomotive_FeedServer) error {
+func (l *Logomotive) Feed(stream logomotive.LogomotiveService_FeedServer) error {
 	for {
 		entry, err := stream.Recv()
 		if err == io.EOF {
@@ -61,22 +61,24 @@ func (l *Logomotive) Feed(stream logomotive.Logomotive_FeedServer) error {
 			return err
 		}
 
-		result, err := l.db.Collection(getLabel(entry)).InsertOne(context.Background(), entry)
+		result, err := l.db.Collection(getLabel(entry.Entry)).InsertOne(context.Background(), entry)
 		if err != nil {
 			return status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))
 		}
 
 		log.Printf("Inserted entry with ID: %v", result.InsertedID)
 
-		if err := stream.Send(entry); err != nil {
+		if err := stream.Send(&logomotive.FeedResponse{
+			Entry: entry.Entry,
+		}); err != nil {
 			return err
 		}
 	}
 }
 
 // Tail iterates through all the logs filtered by the provided TailQuery and streams them back one by one
-func (l *Logomotive) Tail(query *logomotive.TailQuery, stream logomotive.Logomotive_TailServer) error {
-	label := query.Label
+func (l *Logomotive) Tail(req *logomotive.TailRequest, stream logomotive.LogomotiveService_TailServer) error {
+	label := req.Label
 	if label == "" {
 		label = "default"
 	}
@@ -99,7 +101,9 @@ func (l *Logomotive) Tail(query *logomotive.TailQuery, stream logomotive.Logomot
 			return status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode data: %v", err))
 		}
 		// If no error is found send log over stream
-		stream.Send(data)
+		stream.Send(&logomotive.TailResponse{
+			Entry: data,
+		})
 	}
 	// Check if the cursor has any errors
 	if err := cursor.Err(); err != nil {
@@ -110,13 +114,13 @@ func (l *Logomotive) Tail(query *logomotive.TailQuery, stream logomotive.Logomot
 }
 
 // Labels fetches and returns all collection names (labels) found in MongoDB
-func (l *Logomotive) Labels(ctx context.Context, _ *empty.Empty) (*logomotive.LabelList, error) {
+func (l *Logomotive) Labels(ctx context.Context, req *logomotive.LabelsRequest) (*logomotive.LabelsResponse, error) {
 	names, err := l.db.ListCollectionNames(ctx, bson.D{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Unknown database error: %v", err))
 	}
 
-	labels := &logomotive.LabelList{
+	labels := &logomotive.LabelsResponse{
 		Labels: names,
 	}
 	return labels, nil
