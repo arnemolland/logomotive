@@ -34,7 +34,6 @@ class LogomotiveApp extends StatelessWidget {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ),
-        useTextSelectionTheme: true,
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.tealAccent,
           selectionColor: Colors.tealAccent.withOpacity(0.1),
