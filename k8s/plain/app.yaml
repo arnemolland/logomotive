@@ -42,3 +42,7 @@ spec:
         ports:
         - name: logomotive-app
           containerPort: 50051
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 4Gi
