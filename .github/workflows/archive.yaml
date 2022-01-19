@@ -22,7 +22,9 @@ jobs:
         working-directory: client
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
       - uses: actions/setup-java@v1
         with:
           java-version: "8.x"
@@ -45,7 +47,9 @@ jobs:
         working-directory: client/ios
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
@@ -69,9 +73,9 @@ jobs:
         working-directory: client/macos
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: dev
+          channel: stable
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
@@ -96,9 +100,9 @@ jobs:
         working-directory: client
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: dev
+          channel: stable
       - run: flutter pub get
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
@@ -115,9 +119,9 @@ jobs:
         working-directory: client
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: dev
+          channel: stable
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev
       - run: flutter pub get
