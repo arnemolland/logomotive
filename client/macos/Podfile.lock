@@ -1,23 +1,22 @@
 PODS:
   - crayola (0.0.1):
     - FlutterMacOS
-  - FlutterMacOS (2.5)
+  - FlutterMacOS (1.0.0)
 
 DEPENDENCIES:
   - crayola (from `Flutter/ephemeral/.symlinks/plugins/crayola/macos`)
-
-SPEC REPOS:
-  trunk:
-    - FlutterMacOS
+  - FlutterMacOS (from `Flutter/ephemeral`)
 
 EXTERNAL SOURCES:
   crayola:
     :path: Flutter/ephemeral/.symlinks/plugins/crayola/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
 
 SPEC CHECKSUMS:
   crayola: 24527d1859aa605e6d41c349db1c1a30d127f523
-  FlutterMacOS: 078aecd6294d0b7bce11c6dcddcb3e7818567a04
+  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
 
-PODFILE CHECKSUM: d8ba9b3e9e93c62c74a660b46c6fcb09f03991a7
+PODFILE CHECKSUM: 6eac6b3292e5142cfc23bdeb71848a40ec51c14c
 
 COCOAPODS: 1.11.2
