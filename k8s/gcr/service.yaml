@@ -5,6 +5,7 @@ metadata:
 spec:    
   template:
     spec:
+      serviceAccountName: gh-actions@molland.iam.gserviceaccount.com
       containers:
         image: gcr.io/$PROJECT_ID/$IMAGE:$RELEASE_VERSION
         resources:
