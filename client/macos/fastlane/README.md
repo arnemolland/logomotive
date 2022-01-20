@@ -23,6 +23,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Builds and notarizes a Developer ID app
 
+### mac setup
+
+```sh
+[bundle exec] fastlane mac setup
+```
+
+
+
+### mac setup_project
+
+```sh
+[bundle exec] fastlane mac setup_project
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

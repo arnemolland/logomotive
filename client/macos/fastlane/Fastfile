@@ -15,9 +15,29 @@ platform :mac do
       setup_ci
     end
     packages_get
-    sync_code_signing(type: "developer_id")
+    sync_code_signing(
+      type: "developer_id",
+      readonly: is_ci,
+      keychain_name: "action_keychain",
+      keychain_password: ENV["FASTLANE_PASSWORD"],
+    )
     flutter_build
     gym
     notarize(package: "./build/Logomotive.app")
+  end
+
+  lane :setup do
+    setup_project
+  end
+  
+  lane :setup_project do
+    create_keychain(
+      name: "action_keychain",
+      password: ENV["FASTLANE_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
   end
 end

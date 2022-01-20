@@ -86,6 +86,7 @@ jobs:
           ssh-private-key: ${{ secrets.match_deploy_key }}
       - run: bundle install
       - run: flutter config --enable-macos-desktop
+      - run: fastlane setup_project
       - run: fastlane build
       - run: rm -rf build/*.app.dSYM*
       - uses: actions/upload-artifact@v2
