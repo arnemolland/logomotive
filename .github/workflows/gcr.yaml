@@ -47,6 +47,8 @@ jobs:
       - name: Expand service manifest with env vars
         run: envsubst < k8s/gcr/service.yaml > k8s/gcr/service.yaml
         
+      - run: cat k8s/gcr/service.yaml
+        
       - name: Deploy image to Cloud Run
         run: |-
             gcloud beta run services replace k8s/gcr/service.yaml \
