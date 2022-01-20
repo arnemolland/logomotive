@@ -17,7 +17,5 @@ spec:
         env:
         - name: PROJECT_ID
           value: $PROJECT_ID
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: $GCP_SA
         - name: MONGO_URI
           value: $MONGO_URI
